@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body{
+            background: black;
+        }
+
+        h1{
+            text-align: center;
+            margin-top: 180px;
+            color: white;
+            font-weight: bold;
+        }
+        a{
+            color: white;
+            TEXT-DECORATION:none
+        }
+        .d0{
+            width: 450px;
+            margin: auto;
+            height: 460px;
+            padding-top: 100px;
+        }
+
+        form{
+            background: dimgray;
+            height: 355px;
+        }
+
+        .compte{
+            margin-right: 46px;
+            margin-left: 50px;
+            margin-top: 30px;
+            font-size: 22px;
+            color: white;
+        }
+
+        .mdp{
+            margin-right: 19px;
+            margin-left: 50px;
+            margin-top: 30px;
+            font-size: 22px;
+            color: white;
+        }
+
+        .d1{
+            padding-top: 60px;
+            padding-left: 30px;
+        }
+        .d2{
+            padding-top: 40px;
+        }
+        .d3{
+            padding-top: 60px;
+            text-align: center;
+        }
+        button{
+            width: 110px;
+            height: 40px;
+            font-size: 18px;
+            font-family: "Arial";
+        }
+    </style>
+</head>
+<body>
+<h1>Connexion | <a href="http://127.0.0.1:8000/register/">Inscription</a></h1>
+    <div class="d0">
+        <form method="post" action="/user_login/">
+            {% csrf_token %}
+            <div class="d1">
+                <label for="username" class="compte">Compte:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <br>
+            <div class="d2">
+                <label for="password" class="mdp">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+                <br>
+            <div class="d3">
+                <button type="submit">Connecter</button>
+            </div>
+        </form>
+    </div>
+<script>
+    <!-- 其他代码省略 -->
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.querySelector('form');
+    loginForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/user_login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+          },
+          body: JSON.stringify({ username, password }),
+        });
+
+        console.log("Response status:", response.status);
+        if (response.status === 200) {
+          alert('登录成功');
+          // 如果需要跳转到其他页面，可以在这里进行跳转，例如：
+          // location.href = '/dashboard/';
+        } else {
+          alert('登录失败，用户名或密码不正确');
+        }
+      } catch (error) {
+        alert('登录失败，请稍后重试');
+      }
+    });
+  });
+
+</script>
+</body>
+</html>

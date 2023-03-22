@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% csrf_token %}
+    <style>
+        body{
+            background: black;
+        }
+        h1{
+            text-align: center;
+            margin-top: 180px;
+            color: white;
+            font-weight: bold;
+        }
+        .c1{
+            width: 450px;
+            margin: auto;
+            height: 460px;
+            padding-top: 100px;
+        }
+        form{
+            background: dimgray;
+            height: 355px;
+        }
+        .mail{
+            margin-right: 46px;
+            margin-left: 50px;
+            margin-top: 30px;
+            font-size: 22px;
+            color: white;
+        }
+        .c{
+            margin-left: 2px;
+            font-size: 22px;
+            color: white;
+        }
+        .compte{
+            margin-left: 37px;
+            margin-right: 28px;
+            font-size: 22px;
+            color: white;
+        }
+        .mdp{
+            font-size: 22px;
+            color: white;
+        }
+        .inscrip{
+            text-align: center;
+            margin-top: 35px;
+            margin-bottom: 30px;
+            margin-left: 15px;
+        }
+        button{
+            width: 110px;
+            height: 40px;
+            font-size: 18px;
+            font-family: "Arial";
+        }
+        .d1{
+            padding-top: 40px;
+            padding-left: 30px;
+        }
+        .d2{
+            padding-left: 30px;
+        }
+        .d3{
+            padding-left: 30px;
+        }
+        .d4{
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inscription</h1>
+    <div class="c1">
+        <form id="register-form" method="post" action="/register/">
+
+              <div class="d1">
+                <label for="username" class="compte">Pseudo:</label>
+                <input  type="text" id="username" name="username" required>
+              </div>
+                <br>
+              <div class="d2">
+                <label for="email" class="mail">Mail:</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+                <br>
+              <div class="d3">
+                <label for="password" class="mdp">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+              </div>
+                <br>
+              <div class="d4">
+                <label for="confirm-password" class="c">Confirmation:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+              </div>
+                <br>
+                <div class="inscrip">
+                  <button type="submit"  >S'inscrire</button>
+                </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById("register-form").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password.length < 6) {
+                alert("Le mot de passe doit être >= 6 chiffres !");
+                return false;
+            }
+
+
+            if (password !== confirmPassword) {
+                alert("Le mot de passe et le mot de passe de confirmation ne correspondent pas, veuillez le saisir à nouveau.");
+                return;
+            }
+
+            const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+            const response = await fetch("/register/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify({username, email, password})
+            });
+
+            if (response.ok) {
+                alert("Succès de l'inscription.");
+            } else {
+                alert("L'enregistrement a échoué, veuillez réessayer.");
+            }
+        });
+
+
+    </script>
+
+</body>
+</html>
